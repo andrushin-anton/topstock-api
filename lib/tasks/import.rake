@@ -28,5 +28,19 @@ namespace :import do
 
   desc "Imports statistics for companies"
   task stats: :environment do
+    # Find companies needing pulling statistics
+    companies = Api::V1::Company.where('status = ?', 'NEED_STATS').limit(10)
+
+    companies.each do |company|
+      # Update current status to RUNNING
+      company.status = 'RUNNING'
+      company.update
+
+      # Pull the stats
+      puts "Preparing to pull stats for: #{company.ticker},  #{company.name}"
+      puts '................................................................'
+      # ROE
+
+    end
   end
 end
