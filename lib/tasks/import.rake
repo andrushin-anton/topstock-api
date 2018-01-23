@@ -1,5 +1,7 @@
 require 'open-uri'
 require 'csv'
+require 'http'
+require 'json'
 require_relative '../../lib/utilities'
 
 namespace :import do
@@ -28,18 +30,48 @@ namespace :import do
 
   desc "Imports statistics for companies"
   task stats: :environment do
-    # Find companies needing pulling statistics
-    companies = Api::V1::Company.where('status = ?', 'NEED_STATS').limit(10)
-
-    companies.each do |company|
+    # Find companies that need statistics
+    Api::V1::Company.where('status = ?', 'NEED_STATS').limit(10).each do |company|
       # Update current status to RUNNING
       company.status = 'RUNNING'
-      company.update
+      company.save
+      # Find statistics row or initialize new for a given company
+      statistics = Api::V1::Stats.find_by_ticker(company.ticker)
 
       # Pull the stats
       puts "Preparing to pull stats for: #{company.ticker},  #{company.name}"
       puts '................................................................'
-      # ROE
+      puts 'ROE'
+      Utilities::pull_historic_data(statistics, 'roe')
+      puts 'NetIncome'
+      Utilities::pull_historic_data(statistics, 'netincome')
+      puts 'FreeCashFlow'
+      Utilities::pull_historic_data(statistics, 'freecashflow')
+      puts 'ProfitMargin'
+      Utilities::pull_historic_data(statistics, 'profitmargin')
+      puts 'LongTermDebt'
+      Utilities::pull_historic_data(statistics, 'longtermdebt')
+      puts 'GrossMargin'
+      Utilities::pull_historic_data(statistics, 'grossmargin')
+      puts 'ROA'
+      Utilities::pull_historic_data(statistics, 'roa')
+      puts 'DepreciationExpense'
+      Utilities::pull_historic_data(statistics, 'depreciationexpense')
+      puts 'TotalGrossProfit'
+      Utilities::pull_historic_data(statistics, 'totalgrossprofit')
+      puts 'ClosePrice'
+      Utilities::pull_historic_data(statistics, 'close_price')
+      puts 'PriceToEarnings'
+      Utilities::pull_historic_data(statistics, 'pricetoearnings')
+      puts 'BookValuePerShare'
+      Utilities::pull_historic_data(statistics, 'bookvaluepershare')
+
+      # statistics were pulled update the company status
+      company.status = 'NEED_CALCULATIONS'
+      company.save
+      # save statistics
+      statistics.save
+      puts 'SAVED'
 
     end
   end
