@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118100134) do
+ActiveRecord::Schema.define(version: 20180123221037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,25 @@ ActiveRecord::Schema.define(version: 20180118100134) do
     t.string "profitmargin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "api_v1_stats", force: :cascade do |t|
+    t.string "ticker"
+    t.string "roe"
+    t.string "netincome"
+    t.string "freecashflow"
+    t.string "profitmargin"
+    t.string "longtermdebt"
+    t.string "grossmargin"
+    t.string "roa"
+    t.string "depreciationexpense"
+    t.string "totalgrossprofit"
+    t.string "close_price"
+    t.string "pricetoearnings"
+    t.string "bookvaluepershare"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticker"], name: "index_api_v1_stats_on_ticker", unique: true
   end
 
   create_table "companies", force: :cascade do |t|
