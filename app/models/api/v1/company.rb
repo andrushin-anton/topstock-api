@@ -1,5 +1,45 @@
 class Api::V1::Company < ApplicationRecord
 
+  STATUS_CALCULATED = 'CALCULATED'
+  # Company that needs statistics to be pulled in
+  STATUS_NEED_STATS = 'NEED_STATS'
+  # Company that needs its RANK to be re-calculated
+  STATUS_NEED_CALCULATIONS = 'NEED_CALCULATIONS'
+  # Some of the processes is currently running for this company
+  STATUS_RUNNING = 'RUNNING'
+
+  # The method that calculates companies ranks
+  def self.recalculate_rank(status)
+
+    # Find companies that need RANK calculation
+    Api::V1::Company.where('status = ?', status).order('updated_at ASC').each do |company|
+      # fundamental
+      result_fundamental = Api::V1::Stats.fundamental(company.ticker)
+
+      # economic moat
+      result_moat = Api::V1::Stats.moat(company.ticker)
+
+      # find out the real stock price
+      result_real_stock_price = Api::V1::Stats.real_price(company.ticker)
+
+      # company RANK
+      company_rank = find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
+
+      # update rank and status
+      company.rank = company_rank
+      company.status = self::STATUS_CALCULATED
+      company.save
+
+    end
+
+  end
+
+  # The method that finds out the current company's RANK based on its stats
+  def find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
+
+  end
+
+  # Helper method that creates a new company if it is not already exists
   def self.create_company_if_not_exists_from_csv_line(csv_line, exchange_name)
     # ignore if sector is n/a or empty - because it is not a company
     unless csv_line[6].downcase == 'n/a' || csv_line[6] == ''
@@ -10,7 +50,7 @@ class Api::V1::Company < ApplicationRecord
             :exchange => exchange_name,
             :sector => csv_line[6],
             :industry => csv_line[7],
-            :status => 'NEW',
+            :status => self::STATUS_NEED_STATS,
             :rank => '0'
         )
         puts csv_line[0] + ' created!'

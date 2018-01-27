@@ -31,9 +31,9 @@ namespace :import do
   desc "Imports statistics for companies"
   task stats: :environment do
     # Find companies that need statistics
-    Api::V1::Company.where('status = ?', 'NEED_STATS').limit(10).each do |company|
+    Api::V1::Company.where('status = ?', Api::V1::Company::STATUS_NEED_STATS).order('updated_at ASC').limit(10).each do |company|
       # Update current status to RUNNING
-      company.status = 'RUNNING'
+      company.status = Api::V1::Company::STATUS_RUNNING
       company.save
       # Find statistics row or initialize new for a given company
       statistics = Api::V1::Stats.find_by_ticker(company.ticker)
@@ -67,12 +67,15 @@ namespace :import do
       Utilities::pull_historic_data(statistics, 'bookvaluepershare')
 
       # statistics were pulled update the company status
-      company.status = 'NEED_CALCULATIONS'
+      company.status = Api::V1::Company::STATUS_NEED_CALCULATIONS
       company.save
       # save statistics
       statistics.save
       puts 'SAVED'
 
     end
+    # Now it is a good time to recalculate companies RANK
+    # Only for those having status 'NEED_CALCULATIONS'
+    Api::V1::Company.recalculate_rank(Api::V1::Company::STATUS_NEED_CALCULATIONS)
   end
 end
