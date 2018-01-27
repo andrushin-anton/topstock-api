@@ -22,6 +22,8 @@ class Api::V1::Stats < ApplicationRecord
 
     # filter #1 Return on Equity
     result_filter_roe = filter_fundamental_roe(stats.roe)
+    # filter #2 Net income last years
+    result_filter_net_income = filter_fundamental_net_income(stats.netincome)
 
 
   end
@@ -38,20 +40,15 @@ class Api::V1::Stats < ApplicationRecord
 
 
   # Fundamental filters
+  # ROE
   def filter_fundamental_roe(roe_data)
-    data_array = JSON.parse(roe_data)
-    # if no roe data - score BAD
-    unless data_array.any?
-      return Api::V1::Stats::BAD
-    end
-
-    # if value is null
-    if data_array[0]['value'].nil?
+    data = check_if_data_exists(roe_data)
+    if data == false
       return Api::V1::Stats::BAD
     end
 
     # get the latest ROE value and convert it to %
-    roe_latest = (data_array[0]['value'] * 100).round
+    roe_latest = (data[0]['value'] * 100).round
 
     if roe_latest >= 30
       return Api::V1::Stats::EXCELLENT
@@ -70,6 +67,77 @@ class Api::V1::Stats < ApplicationRecord
     end
 
     return Api::V1::Stats::BAD
+  end
+
+  # NET INCOME
+  def filter_fundamental_netincome(netincome)
+    data = check_if_data_exists(netincome)
+    if data == false
+      return Api::V1::Stats::BAD
+    end
+
+    if (data.count >= 3)
+      score = has_grown(data, 3)
+    elsif (data.count >= 2)
+      score = has_grown(data, 2)
+    elsif (data.count >= 1)
+      score = has_grown(data, 1)
+    end
+
+    # The more times Net Income has grown in the past 3 years, the better.
+    case score
+      when 2
+        # Rate Excellent if it has grown 2 times
+        return Api::V1::Stats::EXCELLENT
+      when 1
+        # Very Good if it has grown 1
+        return Api::V1::Stats::VERY_GOOD
+      when 0
+        # Marginal otherwise
+        return Api::V1::Stats::MARGINAL
+    end
+
+    # Otherwise BAD
+    return Api::V1::Stats::BAD
+
+  end
+
+
+
+
+  # Helper method
+  def has_grown(data, times)
+    score = 0
+    i = 1
+    # set the latest value
+    latest_value = data[0]['value']
+
+    while i < times
+      if latest_value >= data[i]['value']
+        score += 1
+      end
+      latest_value = data[i]['value']
+      i += 1
+    end
+    return score
+  end
+
+  def check_if_data_exists(data)
+    if data.to_s.empty?
+      # It's nil or empty
+      return false
+    end
+    data_array = JSON.parse(data)
+    # if no roe data - score BAD
+    unless data_array.any?
+      return false
+    end
+
+    # if value is null
+    if data_array[0]['value'].nil?
+      return false
+    end
+    return data_array
   end
 
 end
