@@ -1,4 +1,5 @@
-require 'rspec'
+require 'rails_helper'
+require_relative '../../../../app/services/api/v1/fundamental_service'
 
 RSpec.describe Api::V1::FundamentalService, type: :service do
   #ROE
@@ -40,22 +41,22 @@ RSpec.describe Api::V1::FundamentalService, type: :service do
 
   # NET INCOME
   it "returns score BAD because no data provided netincome" do
-    expect(Api::V1::FundamentalService.filter_fundamental_netincome('')).to eq(Api::V1::FundamentalService::BAD)
+    expect(Api::V1::FundamentalService.filter_fundamental_net_income('')).to eq(Api::V1::FundamentalService::BAD)
   end
 
   it "returns score EXCELLENT because netincome has grown all last 3 years" do
-    expect(Api::V1::FundamentalService.filter_fundamental_netincome('[{"date":"2016-10-31","value":462000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":349000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::EXCELLENT)
+    expect(Api::V1::FundamentalService.filter_fundamental_net_income('[{"date":"2016-10-31","value":462000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":349000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::EXCELLENT)
   end
 
   it "returns score VERY_GOOD because netincome has grown only last 2 years" do
-    expect(Api::V1::FundamentalService.filter_fundamental_netincome('[{"date":"2016-10-31","value":462000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":549000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::VERY_GOOD)
+    expect(Api::V1::FundamentalService.filter_fundamental_net_income('[{"date":"2016-10-31","value":462000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":549000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::VERY_GOOD)
   end
 
   it "returns score MARGINAL because netincome hasn't grown in the last 3 years" do
-    expect(Api::V1::FundamentalService.filter_fundamental_netincome('[{"date":"2016-10-31","value":362000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":549000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::MARGINAL)
+    expect(Api::V1::FundamentalService.filter_fundamental_net_income('[{"date":"2016-10-31","value":362000000.0},{"date":"2015-10-31","value":401000000.0},{"date":"2014-10-31","value":549000000.0},{"date":"2013-10-31","value":734000000.0},{"date":"2012-10-31","value":1153000000.0},{"date":"2011-10-31","value":1012000000.0},{"date":"2010-10-31","value":684000000.0},{"date":"2009-10-31","value":-31000000.0},{"date":"2008-10-31","value":693000000.0},{"date":"2007-10-31","value":638000000.0}]')).to eq(Api::V1::FundamentalService::MARGINAL)
   end
 
   it "returns score MARGINAL because netincome hasn only 1 year" do
-    expect(Api::V1::FundamentalService.filter_fundamental_netincome('[{"date":"2016-10-31","value":362000000.0}]')).to eq(Api::V1::FundamentalService::MARGINAL)
+    expect(Api::V1::FundamentalService.filter_fundamental_net_income('[{"date":"2016-10-31","value":362000000.0}]')).to eq(Api::V1::FundamentalService::MARGINAL)
   end
 end

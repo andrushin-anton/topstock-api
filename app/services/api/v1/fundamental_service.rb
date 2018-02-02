@@ -1,6 +1,6 @@
 require_relative './common_service'
 
-class FundamentalService
+class Api::V1::FundamentalService
 
   # Scores
   EXCELLENT = 4
@@ -20,6 +20,7 @@ class FundamentalService
 
 
   # Filters
+
   # ROE
   def self.filter_fundamental_roe(roe_data)
     data = Api::V1::CommonService.check_if_data_exists(roe_data)

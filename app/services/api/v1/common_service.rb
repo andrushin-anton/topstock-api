@@ -1,4 +1,4 @@
-class CommonService
+class Api::V1::CommonService
 
   # Helper methods
 
