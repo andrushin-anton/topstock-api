@@ -1,3 +1,7 @@
+require_relative '../../../services/api/v1/fundamental_service'
+require_relative '../../../services/api/v1/economic_moat_service'
+require_relative '../../../services/api/v1/real_price_service'
+
 class Api::V1::Company < ApplicationRecord
 
   STATUS_CALCULATED = 'CALCULATED'
@@ -14,16 +18,16 @@ class Api::V1::Company < ApplicationRecord
     # Find companies that need RANK calculation
     Api::V1::Company.where('status = ?', status).order('updated_at ASC').each do |company|
       # fundamental
-      result_fundamental = Api::V1::Stats.fundamental(company.ticker)
+      result_fundamental = Api::V1::FundamentalService.calculate(company.ticker)
 
       # economic moat
-      result_moat = Api::V1::Stats.moat(company.ticker)
+      result_moat = Api::V1::EconomicMoatService.calculate(company.ticker)
 
       # find out the real stock price
-      result_real_stock_price = Api::V1::Stats.real_price(company.ticker)
+      result_real_stock_price = Api::V1::RealPriceService.calculate(company.ticker)
 
       # company RANK
-      company_rank = find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
+      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
 
       # update rank and status
       company.rank = company_rank
@@ -35,7 +39,7 @@ class Api::V1::Company < ApplicationRecord
   end
 
   # The method that finds out the current company's RANK based on its stats
-  def find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
+  def self.find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
 
   end
 
