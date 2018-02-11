@@ -153,4 +153,100 @@ RSpec.describe Api::V1::FundamentalService, type: :service do
     expect(Api::V1::FundamentalService.filter_gross_profit_margin('[{"date":"2017-10-31", "value":"0.122846"}]')).to eq(Api::V1::FundamentalService::BAD)
   end
 
+  # Final Score
+  it "returns final score EXCELLENT because all filters were excellent" do
+    result_filter_roe = Api::V1::FundamentalService::EXCELLENT
+    result_filter_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_filter_cash_flow = Api::V1::FundamentalService::EXCELLENT
+    result_filter_avg_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_long_debt_to_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_gross_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    expect(Api::V1::FundamentalService.final_score(result_filter_roe,
+                                                   result_filter_net_income,
+                                                   result_filter_cash_flow,
+                                                   result_filter_avg_profit_margin,
+                                                   result_filter_profit_margin,
+                                                   result_filter_long_debt_to_net_income,
+                                                   result_gross_profit_margin
+
+    )).to eq(Api::V1::FundamentalService::EXCELLENT)
+  end
+
+  it "returns final score EXCELLENT because one filter is VERY_GOOD and rest are EXCELLENT" do
+    result_filter_roe = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_filter_cash_flow = Api::V1::FundamentalService::EXCELLENT
+    result_filter_avg_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_long_debt_to_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_gross_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    expect(Api::V1::FundamentalService.final_score(result_filter_roe,
+                                                   result_filter_net_income,
+                                                   result_filter_cash_flow,
+                                                   result_filter_avg_profit_margin,
+                                                   result_filter_profit_margin,
+                                                   result_filter_long_debt_to_net_income,
+                                                   result_gross_profit_margin
+
+    )).to eq(Api::V1::FundamentalService::EXCELLENT)
+  end
+
+  it "returns final score EXCELLENT because 2 filters are VERY_GOOD and rest are EXCELLENT" do
+    result_filter_roe = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_net_income = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_cash_flow = Api::V1::FundamentalService::EXCELLENT
+    result_filter_avg_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_long_debt_to_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_gross_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    expect(Api::V1::FundamentalService.final_score(result_filter_roe,
+                                                   result_filter_net_income,
+                                                   result_filter_cash_flow,
+                                                   result_filter_avg_profit_margin,
+                                                   result_filter_profit_margin,
+                                                   result_filter_long_debt_to_net_income,
+                                                   result_gross_profit_margin
+
+    )).to eq(Api::V1::FundamentalService::EXCELLENT)
+  end
+
+  it "returns final score VERY_GOOD because 4 filters are VERY_GOOD and rest are EXCELLENT" do
+    result_filter_roe = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_net_income = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_cash_flow = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_avg_profit_margin = Api::V1::FundamentalService::VERY_GOOD
+    result_filter_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    result_filter_long_debt_to_net_income = Api::V1::FundamentalService::EXCELLENT
+    result_gross_profit_margin = Api::V1::FundamentalService::EXCELLENT
+    expect(Api::V1::FundamentalService.final_score(result_filter_roe,
+                                                   result_filter_net_income,
+                                                   result_filter_cash_flow,
+                                                   result_filter_avg_profit_margin,
+                                                   result_filter_profit_margin,
+                                                   result_filter_long_debt_to_net_income,
+                                                   result_gross_profit_margin
+
+    )).to eq(Api::V1::FundamentalService::VERY_GOOD)
+  end
+
+  it "returns final score MARGINAL because there are some BAD filter results" do
+    result_filter_roe = Api::V1::FundamentalService::GOOD
+    result_filter_net_income = Api::V1::FundamentalService::GOOD
+    result_filter_cash_flow = Api::V1::FundamentalService::BAD
+    result_filter_avg_profit_margin = Api::V1::FundamentalService::MARGINAL
+    result_filter_profit_margin = Api::V1::FundamentalService::MARGINAL
+    result_filter_long_debt_to_net_income = Api::V1::FundamentalService::BAD
+    result_gross_profit_margin = Api::V1::FundamentalService::BAD
+    expect(Api::V1::FundamentalService.final_score(result_filter_roe,
+                                                   result_filter_net_income,
+                                                   result_filter_cash_flow,
+                                                   result_filter_avg_profit_margin,
+                                                   result_filter_profit_margin,
+                                                   result_filter_long_debt_to_net_income,
+                                                   result_gross_profit_margin
+
+    )).to eq(Api::V1::FundamentalService::MARGINAL)
+  end
+
 end

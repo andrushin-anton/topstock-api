@@ -34,6 +34,19 @@ class Api::V1::FundamentalService
     # filter #7 Gross Profit Margin
     result_gross_profit_margin = Api::V1::FundamentalService.filter_gross_profit_margin(stats.grossmargin)
 
+    return Api::V1::FundamentalService.final_score(
+               result_filter_roe,
+               result_filter_net_income,
+               result_filter_cash_flow,
+               result_filter_avg_profit_margin,
+               result_filter_profit_margin,
+               result_filter_long_debt_to_net_income,
+               result_gross_profit_margin
+    )
+  end
+
+  def self.final_score(roe, net_income, cash_flow, avg_profit_margin, profit_margin, debt_to_net_income, gross_profit_margin)
+    return ((roe + net_income + cash_flow + avg_profit_margin + profit_margin + debt_to_net_income + gross_profit_margin) / 7.0).round
   end
 
 
