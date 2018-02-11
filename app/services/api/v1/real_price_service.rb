@@ -1,7 +1,7 @@
 class Api::V1::RealPriceService
 
   # Starting point
-  def self.calculate(ticker)
+  def self.calculate(company)
 
   end
 

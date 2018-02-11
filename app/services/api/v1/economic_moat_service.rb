@@ -1,7 +1,7 @@
 class Api::V1::EconomicMoatService
 
   # Starting point
-  def self.calculate(ticker)
+  def self.calculate(company)
 
   end
 

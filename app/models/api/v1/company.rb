@@ -18,13 +18,13 @@ class Api::V1::Company < ApplicationRecord
     # Find companies that need RANK calculation
     Api::V1::Company.where('status = ?', status).order('updated_at ASC').each do |company|
       # fundamental
-      result_fundamental = Api::V1::FundamentalService.calculate(company.ticker)
+      result_fundamental = Api::V1::FundamentalService.calculate(company)
 
       # economic moat
-      result_moat = Api::V1::EconomicMoatService.calculate(company.ticker)
+      result_moat = Api::V1::EconomicMoatService.calculate(company)
 
       # find out the real stock price
-      result_real_stock_price = Api::V1::RealPriceService.calculate(company.ticker)
+      result_real_stock_price = Api::V1::RealPriceService.calculate(company)
 
       # company RANK
       company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
