@@ -24,10 +24,10 @@ class Api::V1::Company < ApplicationRecord
       result_moat = Api::V1::EconomicMoatService.calculate(company)
 
       # find out the real stock price
-      result_real_stock_price = Api::V1::RealPriceService.calculate(company)
+      max_buy_price = Api::V1::RealPriceService.calculate(company)
 
       # company RANK
-      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
+      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price)
 
       # update rank and status
       company.rank = company_rank
@@ -39,8 +39,8 @@ class Api::V1::Company < ApplicationRecord
   end
 
   # The method that finds out the current company's RANK based on its stats
-  def self.find_out_company_rank(result_fundamental, result_moat, result_real_stock_price)
-
+  def self.find_out_company_rank(result_fundamental, result_moat, max_buy_price)
+    
   end
 
   # Helper method that creates a new company if it is not already exists
