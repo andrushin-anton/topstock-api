@@ -40,7 +40,8 @@ class Api::V1::Company < ApplicationRecord
 
   # The method that finds out the current company's RANK based on its stats
   def self.find_out_company_rank(result_fundamental, result_moat, max_buy_price)
-    
+    # The highest rank is 5 when
+    # result_fundamental == Api::V1::FundamentalService::EXCELLENT
   end
 
   # Helper method that creates a new company if it is not already exists
@@ -51,6 +52,7 @@ class Api::V1::Company < ApplicationRecord
         Api::V1::Company.create!(
             :ticker => csv_line[0],
             :name => csv_line[1],
+            :price => csv_line[2],
             :exchange => exchange_name,
             :sector => csv_line[6],
             :industry => csv_line[7],
