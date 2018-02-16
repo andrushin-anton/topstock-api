@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215231720) do
+ActiveRecord::Schema.define(version: 20180216231554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,19 @@ ActiveRecord::Schema.define(version: 20180215231720) do
     t.datetime "updated_at", null: false
     t.string "exchange"
     t.string "price"
+    t.string "max_price"
     t.index ["ticker"], name: "index_api_v1_companies_on_ticker", unique: true
+  end
+
+  create_table "api_v1_company_logs", force: :cascade do |t|
+    t.string "ticker"
+    t.string "fundament"
+    t.string "moat"
+    t.string "max_price"
+    t.string "close_price"
+    t.string "rank"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "api_v1_industries", force: :cascade do |t|

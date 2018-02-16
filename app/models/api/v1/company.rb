@@ -29,8 +29,19 @@ class Api::V1::Company < ApplicationRecord
       # company RANK
       company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price, company.price.to_f)
 
+      # save current data into company_logs
+      logs = Api::V1::CompanyLog.new
+      logs.ticker = company.ticker
+      logs.fundament = result_fundamental
+      logs.moat = result_moat
+      logs.close_price = company.price
+      logs.max_price = max_buy_price
+      logs.rank = company_rank
+      logs.save
+
       # update rank and status
       company.rank = company_rank
+      company.max_price = max_buy_price
       company.status = self::STATUS_CALCULATED
       company.save
 

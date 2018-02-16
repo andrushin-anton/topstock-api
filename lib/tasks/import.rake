@@ -63,8 +63,6 @@ namespace :import do
       Utilities::pull_historic_data(statistics, 'depreciationexpense')
       puts 'TotalGrossProfit'
       Utilities::pull_historic_data(statistics, 'totalgrossprofit')
-      puts 'ClosePrice'
-      Utilities::pull_historic_data(statistics, 'close_price')
       puts 'PriceToEarnings'
       Utilities::pull_historic_data(statistics, 'pricetoearnings')
       puts 'BookValuePerShare'
