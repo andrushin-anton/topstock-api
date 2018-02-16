@@ -152,7 +152,7 @@ class Api::V1::FundamentalService
       return Api::V1::FundamentalService::BAD
     end
     # Convert company_profit_margin to percent
-    profit_margin = data[0]['value'] * 100
+    profit_margin = (data[0]['value'] * 100).to_f
 
     # If the company’s current Profit Margin is greater than the company’s average industry Profit Margin, then rate Excellent
     if profit_margin > avg_industry_profit_margin

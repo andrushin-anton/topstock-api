@@ -27,7 +27,7 @@ class Api::V1::Company < ApplicationRecord
       max_buy_price = Api::V1::RealPriceService.calculate(company)
 
       # company RANK
-      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price, company.price)
+      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price, company.price.to_f)
 
       # update rank and status
       company.rank = company_rank

@@ -23,7 +23,7 @@ class Api::V1::RealPriceService
     share_price_in_future = (per_share_earnings_in_future * lowest_pe_value).round(2)
 
     # Finally estimate the max buy price
-    max_buy_price_value = Api::V1::RealPriceService.max_buy_price(share_price_in_future)
+    return Api::V1::RealPriceService.max_buy_price(share_price_in_future)
   end
 
   # Recommended discount rate of 24%
