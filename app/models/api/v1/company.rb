@@ -27,7 +27,7 @@ class Api::V1::Company < ApplicationRecord
       max_buy_price = Api::V1::RealPriceService.calculate(company)
 
       # company RANK
-      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price)
+      company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price, company.price)
 
       # update rank and status
       company.rank = company_rank
@@ -39,9 +39,20 @@ class Api::V1::Company < ApplicationRecord
   end
 
   # The method that finds out the current company's RANK based on its stats
-  def self.find_out_company_rank(result_fundamental, result_moat, max_buy_price)
-    # The highest rank is 5 when
-    # result_fundamental == Api::V1::FundamentalService::EXCELLENT
+  def self.find_out_company_rank(result_fundamental, result_moat, max_buy_price, close_price)
+    # rank formula: (fundamental + moat + max_buy_price_to_close_price) / 2
+    # the highest rank is 5
+    return (result_fundamental + result_moat + Api::V1::Company.max_buy_price_to_close_price(max_buy_price, close_price)) / 2.0
+  end
+
+  def self.max_buy_price_to_close_price(max_buy_price, close_price)
+    if max_buy_price.round > close_price.round
+      return 2
+    elsif max_buy_price.round == close_price.round
+      return 1
+    else
+      return 0
+    end
   end
 
   # Helper method that creates a new company if it is not already exists
