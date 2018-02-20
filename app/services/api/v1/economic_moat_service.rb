@@ -1,4 +1,5 @@
 class Api::V1::EconomicMoatService
+
   # Economic moat scores
   VERY_STRONG = 4
   STRONG = 3
@@ -7,41 +8,35 @@ class Api::V1::EconomicMoatService
   # Starting point
   def self.calculate(company)
     stats = Api::V1::Stats.find_by_ticker(company.ticker)
-
     # filter #1 Return on Equity above 15 percent (in each of the past 3 years). Give the company 1 point if it passes or 0 points if it doesn’t.
     result_filter_roe = Api::V1::EconomicMoatService.filter_roe(stats.roe)
-
     # filter #2 Return on Assets is higher than 6 percent in each of the past 3 years. Give the company 1 point if it passes or 0 points if it doesn’t.
     result_filter_roa = Api::V1::EconomicMoatService.filter_roa(stats.roa)
-
     # filter #3 Depreciation / Gross Profit
     # Give the company 2 points if it passes with 8% or less, 1 point if it is between 8% and 18% and 0 points if it is 18% or higher
     result_filter_dep = Api::V1::EconomicMoatService.filter_dep(stats.depreciationexpense, stats.totalgrossprofit)
-
     # Return avg result
     return Api::V1::EconomicMoatService.final_score(result_filter_roe, result_filter_roa, result_filter_dep)
-
   end
+
+
 
   def self.final_score(roe, roa, dep)
     result = roe + roa + dep
-
+    # Very strong
     if result >= Api::V1::EconomicMoatService::VERY_STRONG
       return Api::V1::EconomicMoatService::VERY_STRONG
     end
-
+    # Strong
     if result >= Api::V1::EconomicMoatService::STRONG
       return Api::V1::EconomicMoatService::STRONG
     end
-
     # Otherwise WEAK
     return Api::V1::EconomicMoatService::WEAK
   end
 
 
-  # Filters
 
-  # Return on Equity
   def self.filter_roe(roe_input)
     # check if data exists
     data = Api::V1::CommonService.check_if_data_exists(roe_input)
@@ -67,11 +62,11 @@ class Api::V1::EconomicMoatService
     if score == 3
       return 1
     end
-
     return 0
   end
 
-  # Return on Assets
+
+
   def self.filter_roa(roa_input)
     # check if data exists
     data = Api::V1::CommonService.check_if_data_exists(roa_input)
@@ -97,11 +92,11 @@ class Api::V1::EconomicMoatService
     if score == 3
       return 1
     end
-
     return 0
   end
 
-  # Depreciation / Gross Profit
+
+
   def self.filter_dep(dep, gross_profit)
     # check if data exists
     data_dep = Api::V1::CommonService.check_if_data_exists(dep)
@@ -123,7 +118,7 @@ class Api::V1::EconomicMoatService
     if result <= 18 && result > 8
       return 1
     end
-
     return 0
   end
+
 end

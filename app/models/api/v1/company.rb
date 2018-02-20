@@ -12,20 +12,17 @@ class Api::V1::Company < ApplicationRecord
   # Some of the processes is currently running for this company
   STATUS_RUNNING = 'RUNNING'
 
+
   # The method that calculates companies ranks
   def self.recalculate_rank(status)
-
     # Find companies that need RANK calculation
     Api::V1::Company.where('status = ?', status).order('updated_at ASC').each do |company|
       # fundamental
       result_fundamental = Api::V1::FundamentalService.calculate(company)
-
       # economic moat
       result_moat = Api::V1::EconomicMoatService.calculate(company)
-
       # find out the real stock price
       max_buy_price = Api::V1::RealPriceService.calculate(company)
-
       # company RANK
       company_rank = Api::V1::Company.find_out_company_rank(result_fundamental, result_moat, max_buy_price, company.price.to_f)
 
@@ -44,10 +41,9 @@ class Api::V1::Company < ApplicationRecord
       company.max_price = max_buy_price
       company.status = self::STATUS_CALCULATED
       company.save
-
     end
-
   end
+
 
   # The method that finds out the current company's RANK based on its stats
   def self.find_out_company_rank(result_fundamental, result_moat, max_buy_price, close_price)
@@ -55,6 +51,8 @@ class Api::V1::Company < ApplicationRecord
     # the highest rank is 5
     return (result_fundamental + result_moat + Api::V1::Company.max_buy_price_to_close_price(max_buy_price, close_price)) / 2.0
   end
+
+
 
   def self.max_buy_price_to_close_price(max_buy_price, close_price)
     if max_buy_price.round > close_price.round
@@ -65,6 +63,7 @@ class Api::V1::Company < ApplicationRecord
       return 0
     end
   end
+
 
   # Helper method that creates a new company if it is not already exists
   def self.create_company_if_not_exists_from_csv_line(csv_line, exchange_name)
