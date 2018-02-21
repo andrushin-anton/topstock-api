@@ -6,6 +6,8 @@ require_relative '../../lib/utilities'
 
 namespace :import do
 
+
+
   desc "Imports companies"
   task companies: :environment do
     # Add companies from AMEX
@@ -25,12 +27,9 @@ namespace :import do
     companies.each do |line|
       Api::V1::Company::create_company_if_not_exists_from_csv_line(line, 'NYSE')
     end
-
-    # Now it is a good time to recalculate companies RANK
-    # Only for those having status 'NEED_CALCULATIONS'
-    Api::V1::Company.recalculate_rank(Api::V1::Company::STATUS_NEED_CALCULATIONS)
-
   end
+
+
 
   desc "Imports statistics for companies"
   task stats: :environment do
@@ -76,10 +75,9 @@ namespace :import do
       puts 'SAVED'
 
     end
-    # Now it is a good time to recalculate companies RANK
-    # Only for those having status 'NEED_CALCULATIONS'
-    Api::V1::Company.recalculate_rank(Api::V1::Company::STATUS_NEED_CALCULATIONS)
   end
+
+
 
   desc "Recalculates rank for companies(optional for testing purposes)"
   task rank_calculate: :environment do

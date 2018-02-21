@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216231554) do
+ActiveRecord::Schema.define(version: 20180221211415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20180216231554) do
     t.string "exchange"
     t.string "price"
     t.string "max_price"
+    t.float "market_cap"
     t.index ["ticker"], name: "index_api_v1_companies_on_ticker", unique: true
   end
 
