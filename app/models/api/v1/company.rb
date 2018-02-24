@@ -76,7 +76,6 @@ class Api::V1::Company < ApplicationRecord
         company.ticker = csv_line[0]
         company.name = csv_line[1]
         company.price = csv_line[2]
-        company.market_cap = csv_line[3]
         company.exchange = exchange_name
         company.sector = csv_line[6]
         company.industry = csv_line[7]
