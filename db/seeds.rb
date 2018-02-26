@@ -8,9 +8,9 @@
 
 
 # Create default processors
-Api::V1::Processor.create(processor_type: 'STATS', status: 'ACTIVE', run_time: DateTime.now, processor_data: '', last_error: '')
-Api::V1::Processor.create(processor_type: 'RANK', status: 'ACTIVE', run_time: DateTime.now, processor_data: '', last_error: '')
-Api::V1::Processor.create(processor_type: 'IMPORT', status: 'ACTIVE', run_time: DateTime.now, processor_data: '', last_error: '')
+Api::V1::Processor.create(processor_type: 'STATS', status: 'ACTIVE', run_time: DateTime.now, processor_data: '{}', last_error: '')
+Api::V1::Processor.create(processor_type: 'RANK', status: 'ACTIVE', run_time: DateTime.now, processor_data: '{}', last_error: '')
+Api::V1::Processor.create(processor_type: 'IMPORT', status: 'ACTIVE', run_time: DateTime.now, processor_data: '{}', last_error: '')
 
 # Create default avg profit-margin per industry
 Api::V1::Industry.create(name: 'Construction/Ag Equipment/Trucks', profitmargin: '1.44')

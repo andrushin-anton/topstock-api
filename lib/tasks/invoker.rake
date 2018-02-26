@@ -32,7 +32,13 @@ namespace :invoker do
         current_proc = ImportProcessor.new(processor)
     end
     # launch it!
-    current_proc.run
+    begin
+      current_proc.run
+    rescue Exception => e
+      processor.status = 'ERROR'
+      processor.last_error = e.message
+      processor.save
+    end
   end
 
 
