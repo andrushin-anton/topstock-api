@@ -16,3 +16,4 @@
 .byebug_history
 .idea
 secrets.yml
+.pem
