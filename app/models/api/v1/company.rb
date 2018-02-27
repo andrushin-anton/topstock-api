@@ -85,6 +85,7 @@ class Api::V1::Company < ApplicationRecord
         puts "#{csv_line[0]} updated!"
       else
         company = Api::V1::Company.new
+        company.ticker = csv_line[0]
         company.name = csv_line[1]
         company.price = csv_line[2]
         company.market_cap = csv_line[3]
