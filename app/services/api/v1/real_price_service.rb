@@ -80,7 +80,7 @@ class Api::V1::RealPriceService
     pe_array = []
     data.each do |row|
       if i <= max_years
-        pe_array << row['value'].to_f
+        pe_array << row['value'].to_f if row['value'] != 'nm'
       end
       i = i + 1
     end
