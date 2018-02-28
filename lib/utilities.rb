@@ -102,9 +102,10 @@ class Utilities
     res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') {|http|
       http.request(req)
     }
+
     if res.is_a?(Net::HTTPSuccess)
-      response_body = JSON.parse(res.body)
-      # Append data if only exists
+      response_body = JSON.parse(res.body.gsub! 'NaN', 'null')
+      # Append data if'Robert' only exists
       if response_body.key?('data')
         stats.send(item+'=', response_body['data'].to_json)
       end
