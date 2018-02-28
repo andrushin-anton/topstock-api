@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       namespace :v1 do
         get 'companies' => 'companies#index'
         get 'companies/:ticker' => 'companies#ticker'
+        post 'companies/stats/:ticker' => 'companies#pull_stats'
       end
     end
   #end

@@ -35,18 +35,9 @@ class StatsProcessor
     # Pull the stats
     puts "Preparing to pull stats for: #{company.ticker},  #{company.name}"
     puts '................................................................'
-    Utilities.pull_in_stats(statistics)
-
-    # statistics were pulled update the company status
-    company.status = Api::V1::Company::STATUS_NEED_CALCULATIONS
-    company.save
-    # save statistics
-    statistics.save
-    puts 'SAVED'
-
+    offset = Utilities.pull_in_stats(company, statistics, offset)
 
     # upp the offset
-    offset += 1
     processor_data['OFFSET'] = offset
     @processor.processor_data = processor_data.to_json
     @processor.last_run_time = DateTime.now
