@@ -106,6 +106,7 @@ class Utilities
     if res.is_a?(Net::HTTPSuccess)
       response = res.body.gsub 'NaN', '0.0'
       response = response.gsub 'null', '0.0'
+      response = response.gsub 'nm', '0.0'
       response_body = JSON.parse(response)
       # Append data if'Robert' only exists
       if response_body.key?('data')
