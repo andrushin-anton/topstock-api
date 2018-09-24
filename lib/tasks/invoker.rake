@@ -1,3 +1,5 @@
+require 'json/add/exception'
+
 require_relative '../../app/processors/api/v1/import_processor'
 require_relative '../../app/processors/api/v1/rank_processor'
 require_relative '../../app/processors/api/v1/stats_processor'
@@ -36,7 +38,7 @@ namespace :invoker do
       current_proc.run
     rescue Exception => e
       processor.status = 'ERROR'
-      processor.last_error = e.message
+      processor.last_error = e.to_json
       processor.save
     end
   end
