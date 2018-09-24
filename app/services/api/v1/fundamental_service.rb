@@ -184,11 +184,11 @@ class Api::V1::FundamentalService
     # AVG company's profit margin in the last 3 years
     avg_profit_margin = total / denominator
     # If the company’s current Profit Margin is greater than the company’s average Profit Margin, then rate Excellent
-    if data[0]['value'] > avg_profit_margin
+    if data[0]['value'].to_f > avg_profit_margin
       return Api::V1::FundamentalService::EXCELLENT
     end
     # if it’s equal, rate Good
-    if data[0]['value'] == avg_profit_margin
+    if data[0]['value'].to_f == avg_profit_margin
       return Api::V1::FundamentalService::GOOD
     end
     # Otherwise rate Bad
