@@ -171,7 +171,7 @@ class Api::V1::FundamentalService
     total = 0
     data.each do |row|
       if i <= 3
-        total += row['value']
+        total += row['value'].to_f
       end
       i = i + 1
     end
