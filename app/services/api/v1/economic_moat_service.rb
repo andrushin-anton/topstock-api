@@ -48,7 +48,7 @@ class Api::V1::EconomicMoatService
     iterator = 0
     # iterate over the last 3 years
     data.each do |roe|
-      if ((roe['value'] * 100) >= 15)
+      if ((roe['value'].to_f * 100) >= 15)
         score += 1
       end
 
@@ -78,7 +78,7 @@ class Api::V1::EconomicMoatService
     iterator = 0
     # iterate over the last 3 years
     data.each do |roa|
-      if ((roa['value'] * 100) >= 6)
+      if ((roa['value'].to_f * 100) >= 6)
         score += 1
       end
 
@@ -109,7 +109,7 @@ class Api::V1::EconomicMoatService
       return 0
     end
 
-    result = (data_dep[0]['value'] / data_gross[0]['value']) * 100
+    result = (data_dep[0]['value'].to_f / data_gross[0]['value'].to_f) * 100
 
     if result <= 8
       return 2

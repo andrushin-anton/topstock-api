@@ -39,7 +39,7 @@ class Api::V1::RealPriceService
     if data == false
       return 0
     end
-    return data[0]['value']
+    return data[0]['value'].to_f
   end
 
 
@@ -54,7 +54,7 @@ class Api::V1::RealPriceService
     total = 0
     data.each do |row|
       if i <= max_years
-        total += row['value']
+        total += row['value'].to_f
       end
       i = i + 1
     end
